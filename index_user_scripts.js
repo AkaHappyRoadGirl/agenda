@@ -42,14 +42,6 @@
         alert('Soy Alerta');
     });
     
-        /* button  #cambia-r */
-    $(document).on("click", "#cambia-r", function(evt)
-    {
-        /* your code goes here */ 
-        var res = document.getElementById("r");
-        res.innerHTML += "<div>"+ "key: llave value: valor</div>";
-    });
-    
         /* button  #buttadd */
     $(document).on("click", "#buttadd", function(evt)
     {
@@ -164,9 +156,42 @@
         });
     });
 }
+     
+      /////buscar
+    function searchRows(search_param) {
+    
+    var qu = "select * from myTable2 where nombre='"+search_param+"'";
+    var re = document.getElementById("main");
+            re.innerHTML = "cambiando r...";
+        
+    db.transaction(function (t) {
+        t.executeSql(qu, null, function (t, data) {
+            var html = "<table><tr><td>EN RE: ID</td><td>Nombre</td><td>Apellidos</td><td>Telf</td></tr>";
+            for (var i = 0; i < data.rows.length; i++) {
+                  html += "<tr><td>" + 
+                  data.rows.item(i).id + "</td><td>" +
+                  data.rows.item(i).nombre + "</td><td>" +
+                  data.rows.item(i).apellidos + "</td><td>" +
+                  data.rows.item(i).telf + "</td></tr>";
+            }
+            html += "</table>";
+            var re = document.getElementById("main");
+            re.innerHTML = html;
+        });
+    });
+}
     ///////final
      
-      }
+          /* button  #buscar */
+    $(document).on("click", "#buscar", function(evt)
+    {
+        /* your code goes here */
+        var search_param = document.getElementById("param_buscar").value;
+        alert(search_param);
+        searchRows(search_param);
+    });
+    
+    }
  document.addEventListener("app.Ready", register_event_handlers, false);
 
 })();
