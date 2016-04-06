@@ -1,9 +1,5 @@
 <!DOCTYPE html>
 <html>
-    <!--
-  * Copyright © 2012-2015, Intel Corporation. All rights reserved.
-  * Please see the included README.md file for license terms and conditions.
-  -->
 
     <head>
         <link rel="stylesheet" type="text/css" href="galleria/galleria.classic.css">
@@ -11,7 +7,7 @@
         <meta charset="UTF-8">
         <link rel="stylesheet" type="text/css" href="app_framework/2.1/css/af.ui.min.css">
         <link rel="stylesheet" type="text/css" href="app_framework/2.1/css/icons.min.css">
-        <title>Blank App Designer Packaged Web App Project Template</title>
+        <title>Agenda - Abogacía Española</title>
         <meta http-equiv="Content-type" content="text/html; charset=utf-8">
 
         <!--
@@ -93,6 +89,13 @@
 
     <body id="afui" class="af">
 
+        <div id="splashscreen" class="ui-loader">
+            <img src="images/screenshot.png">
+            <br>
+            <br>
+            <span class="ui-icon ui-icon-loading spin"></span>
+            <h1>Starting app</h1>
+        </div>
         <!-- IMPORTANT: Do not include a weinre script tag as part of your release builds! -->
         <!-- Place your remote debugging (weinre) script URL from the Test tab here, if it does not work above -->
         <!-- <script src="http://debug-software.intel.com/target/target-script-min.js#insertabiglongfunkynumberfromthexdkstesttab"></script> -->
@@ -104,7 +107,7 @@
                 <div class="upage-outer">
                     <div class="upage-content content-area vertical-col" id="page_100_31"><a class="button widget uib_w_2 d-margins color e-margins icon info" data-uib="app_framework/button" data-ver="1" id="mainButton">SideBar Indice</a>
                         <div class="button-grouped flex widget uib_w_3 d-margins" data-uib="app_framework/button_group" data-ver="1"><a class="button widget uib_w_4 color1" data-uib="app_framework/button" data-ver="1" style="border-left-width: 1px; border-left-style: solid; border-left-color: rgb(102, 102, 102); border-top-left-radius: 6px; border-bottom-left-radius: 6px;"
-                            id="gotopage2">Incluir datos</a><a class="button widget uib_w_5 color2" data-uib="app_framework/button" data-ver="1" id="butalert">Alerta</a><a class="button widget uib_w_6 color3" data-uib="app_framework/button" data-ver="1"
+                            id="gotopage2">Incluir datos</a><a class="button widget uib_w_5 color2" data-uib="app_framework/button" data-ver="1" id="butsync">Sincronizar</a><a class="button widget uib_w_6 color3" data-uib="app_framework/button" data-ver="1"
                             style="border-top-right-radius: 6px; border-bottom-right-radius: 6px;" id="buscar">buscar</a>
                         </div>
 
@@ -115,14 +118,9 @@
                         </div>
 
                         <div class="table-thing with-label widget uib_w_18 d-margins" data-uib="app_framework/select" data-ver="1">
-                            <label class="narrow-control label-inline">Select</label>
+                            <label class="narrow-control label-inline">Buscar cargos</label>
 
-                            <select class="wide-control">
-                                <option>Presidente</option>
-                                <option>Decanos de los Colegios de Abogados</option>
-                                <option>Consejos Autonómicos de Colegios</option>
-                                <option>Consejeros Electivos</option>
-                                <option>Secretaría General Técnica</option>
+                            <select class="wide-control" id="sel_cargos">
                             </select>
                         </div>
 
@@ -133,6 +131,7 @@
                                 <p>yo soy main</p>
                             </div>
                         </div>
+                        <div class="panel" title="picguid" id="item1007" data-footer="none">detalle</div>
                     </div>
                     <div class="inner-element uib_w_7 uib_sidebar leftbar bar-bg thumb-bg bar-gutter" data-uib="layout/left_sidebar" data-ver="1" data-anim="{'style':'overlap', 'v':200, 'side':'left', 'dur':200}">
                         <div class="sidebar-content content-area vertical-col">
@@ -152,14 +151,13 @@
 
                                         <div class="widget uib_w_19 scale-image d-margins Image_sizing align" data-uib="media/img" data-ver="0">
                                             <figure class="figure-align">
-                                                <img src="images/intel.png">
+                                                <img src="images/logo.png">
 
                                                 <figcaption data-position="bottom"></figcaption>
                                             </figure>
                                         </div>
-                                        <div class="button-grouped widget uib_w_24 d-margins vertical" data-uib="app_framework/button_group" data-ver="1"><a class="button widget uib_w_25" data-uib="app_framework/button" data-ver="1" style="border-top-left-radius: 6px; border-top-right-radius: 6px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;">CONSEJO GENERAL, FUNDACIÓN, DELEGACIÓN BRUSELAS Y REDABOGACÍA</a>
-                                            <a class="button widget uib_w_26" data-uib="app_framework/button" data-ver="1">MIEMBROS DEL CONSEJO GENERAL DE LA ABOGACÍA ESPAÑOLA</a><a class="button widget uib_w_27" data-uib="app_framework/button" data-ver="1"
-                                            style="border-top-right-radius: 0px; border-top-left-radius: 0px; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: rgb(102, 102, 102);">MUTUALIDAD GENERAL DE PREVISIÓN SOCIAL DE LA ABOGACÍA</a>
+                                        <div class="button-grouped widget uib_w_24 d-margins vertical" data-uib="app_framework/button_group" data-ver="1">
+											<a class="button widget uib_w_27" data-uib="app_framework/button" data-ver="1" style="border-top-right-radius: 0px; border-top-left-radius: 0px; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: rgb(102, 102, 102);" id="div_indice">MUTUALIDAD GENERAL DE PREVISIÓN SOCIAL DE LA ABOGACÍA</a>
                                         </div>
 
                                         <span class="uib_shim"></span>
@@ -170,6 +168,11 @@
                         </div>
                     </div>
                     <div id="page2" class="upage-content vertical-col left hidden"><a class="button widget uib_w_28 d-margins" data-uib="app_framework/button" data-ver="1" id="gohome" data-page-type="document_page">go home</a>
+                        <div class="table-thing with-label widget uib_w_35 d-margins" data-uib="app_framework/input" data-ver="1">
+                            <label class="narrow-control label-inline" for="id_ext">id_ext</label>
+
+                            <input class="wide-control" placeholder="id_ext" type="text" id="id_ext">
+                        </div>
                         <div class="table-thing with-label widget uib_w_30 d-margins" data-uib="app_framework/input" data-ver="1">
                             <label class="narrow-control label-inline" for="nombre">nombre</label>
 
