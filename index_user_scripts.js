@@ -9,6 +9,11 @@
  */
  function register_event_handlers()
  {
+            /* priemra pantalla: inicio */
+    $(document).on("click", "#inicio", function(evt)
+    {
+		activate_subpage("#page_100_31");
+    });
     
     
      /* button  #mainButton */
@@ -21,15 +26,9 @@
         /* button  #gohome */
     $(document).on("click", "#gohome", function(evt)
     {
-         /*global activate_subpage */
          activate_subpage("#page_100_31"); 
     });
     
-        /* button  #butalert */
-    $(document).on("click", "#butalert", function(evt)
-    {
-        window.alert('Soy Alerta');
-    });
     
         /* button  #buttadd */
     $(document).on("click", "#buttadd", function(evt)
@@ -38,34 +37,6 @@
     });
     
    
-   // window.alert('Pantalla de presentación, despues de getlocalstorage');
-     
-     
-    /////final events
-    // var db = getLocalstorage();
-    
-    ///set local
-    function setlocal() 
-{            
-    db.setItem(document.getElementById("txtKey").value,
-          document.getElementById("txtValue").value);
-    getlocal();           
- }
-    
-    /////get local
-    function getlocal()
- {            
-    var res = document.getElementById("r");
-    var pairs;            
-    var i=0;
-    var key;
-    res.innerHTML  = "";
-    for (i=0; i<=db.length-1; i++) {
-    key = db.key(i);             
-    res.innerHTML += "<div> En getLocal "+ "key: "+ key +" value: "+db.getItem(key)+"</div>";
-   }  
-}
-     
     ///////comprobar que podemos ejecutar HTML5
     function getopenDb() { 
     try {
@@ -84,7 +55,7 @@
      
      
     ////
-   var db = createTable();
+	var db = createTable();
 	var db_entidad = tabla_entidades();
      //createTable();
     /////crearla
@@ -135,26 +106,27 @@
         el.innerHTML = "<h3>Listado Completo</h3>";
         var f7Contacts = localStorage.getItem("conrestapi");
 		var data =  JSON.parse(f7Contacts); // ? JSON.parse(f7Contacts) : tempInitializeStorage();
-	
-		var parcial = '<div class="sortable-list-block widget uib_w_36 d-margins" data-uib="framework7/sortable" data-ver="0" id="lista"><div class="list-block sortable"><ul class="list">';
+		
 		var parcial_card = '';
 		var select_cargos = '';
 		var div_indice ='';
 		
 		$.each(data, function(i, item) {
-
-            parcial += mostrar_en_lista(data[i].picguid,data[i].nombre,data[i].apellidos,data[i].cargo);
 			
-            parcial_card += '<div class="panel" title="picguid'+i+'" id="item' + data[i].picguid + '" data-footer="none"><div class="item-media" style="float:left"><img src="images/'+data[i].picguid+'.png" width="103"></div><p>' +data[i].nombre + '  ' +data[i].apellidos + '<br>'+data[i].entidad.nombre+': ' +data[i].cargo+ '<br><a href="tel:' +data[i].telf+ '">' +data[i].telf+ '</a><br><a href="mailto:' +data[i].email1+ '">' +data[i].email1+ '</a></p></div>';
+            parcial_card += '<div class="panel" title="picguid'+i+'" id="item' + data[i].id + '" data-footer="none">';
+			if(data[i].picguid)parcial_card += '<div class="item-media" style="float:left"><img src="images/'+data[i].picguid+'.png" width="103"></div>';
+			parcial_card += '<p>' +data[i].nombre + '  ' +data[i].apellidos + '<br>';
+			if(data[i].entidad)parcial_card += data[i].entidad;
+			if(data[i].cargo)parcial_card += ': ' +data[i].cargo;
+			parcial_card += '<br><a href="tel:' +data[i].telf+ '">' +data[i].telf+ '</a><br><a href="mailto:' +data[i].email1+ '">' +data[i].email1+ '</a></p></div>';
 			//window.alert(data[i].entidad.nombre);
 			select_cargos += '<option value="'+data[i].cargo+'">'+data[i].cargo+'</option>';
 			
 		});
-		parcial += '</ul></div></div>';
 		
-		$( parcial ).insertAfter( "#main" );
+		muestra_lista(data);
 		$( parcial_card ).insertAfter( "#item1007" );
-		window.alert('relleno select de cargos');
+		//window.alert('relleno select de cargos');
 		$('#sel_cargos').html(select_cargos);
 }//fin seleccionar
 	 
@@ -167,7 +139,7 @@
 		if(!openDB){                
 			window.alert('creando db entidades');
 			var rootURL = 'http://agenda.happyroadgirl.com/';	
-			res.innerHTML = '<div>Conectando para sincronizar con ' + rootURL + '</div>';
+			res.innerHTML = '<div>Conectando para rellenar desde ' + rootURL + '</div>';
 			
 					$.ajax({
 					type: 'GET',
@@ -204,24 +176,21 @@
 	}//fin fill_indice
 
 	/////muestra_lista
-    function muestra_lista(datos) {
-        $('#lista').html('');
-		var parcial = '<div class="sortable-list-block widget uib_w_36 d-margins" data-uib="framework7/sortable" data-ver="0" id="lista"><div class="list-block sortable"><ul class="list">';
-
-		$.each(datos, function(i, item) {
-            parcial += mostrar_en_lista(datos[i].picguid,datos[i].nombre,datos[i].apellidos,datos[i].cargo);
+    function muestra_lista(data) {
+		var parcial = '<ul class="list">';
+		$.each(data, function(i, item) {
+            parcial += '<li><a href="#item' + data[i].id + '">';
+			if(data[i].picguid)parcial += '<div class="item-media" style="float:left"><img src="images/'+ data[i].picguid +'.png" width="44"></div>';
+			parcial += '<p>' + data[i].nombre + ' ' + data[i].apellidos + '</p>';
+			parcial +='</a><br>';
+			if(data[i].cargo)parcial +=  data[i].cargo;
+			//parcial += '<a href="tel:' +data[i].telf+ '">' +data[i].telf+ '</a>';
+			parcial += '</li>';
 		});
-		parcial += '</ul></div></div>';
-		
-		$( parcial ).insertAfter( "#main" );
+		parcial += '</ul>';
+		$('#lista').html(parcial);
 }//fin muestra_lista
 	 
-	//////////mostrar
-     function mostrar_en_lista(picguid,nombre,apellidos,cargo){
-         var una_card = '';
-			una_card += '<li><a href="#item' +picguid + '"><div class="item-media" style="float:left"><img src="images/'+picguid+'.png" width="44"></div><p>' +nombre + ' ' +apellidos + '</p></a><br>' +cargo+ '</li>';
-         return una_card;
-     }//fin mostrar
 	 
       /////buscar
     function searchRows(param,search_param) {  
@@ -232,7 +201,8 @@
 		var as=$(data).filter(function (i,n){
 			switch(param) {
 				case 'entidad':
-					return n.entidad.nombre.indexOf(search_param)>=0;
+					if(n.entidad){return n.entidad.indexOf(search_param)>=0;}
+					break;
 				case 'cargo':
 					return n.cargo.indexOf(search_param)>=0;
 				default:
@@ -247,7 +217,7 @@
 	function Contact(values) {
 		values = values || {};
 		this.id = values.id || generateGUID();
-		this.picguid = values.picguid;
+		this.picguid  = values.picguid;
 		this.createdOn = values.createdOn || new Date();
 
 		this.nombre = values.nombre || '';
@@ -299,8 +269,9 @@
     $(document).on("click", ".but_indice", function(evt)
     {
         var search_param = $(this).text();//document.getElementById("param_buscar").value;
-		window.alert($(this).text());
+		//window.alert($(this).text());
         searchRows('entidad',search_param);
+		uib_sb.toggle_sidebar($(".uib_w_7"));
     });
 	 
 	/* select de cargos */
@@ -326,7 +297,7 @@
                window.alert('colocando datos en su sitio 8 -> ' + data[index].imagen.post_title);
                 //update(data[index].id,data[index].nombre,data[index].apellidos,data[index].telf);
 				nuevoarray = JSON.parse(localStorage.getItem('conrestapi')) || [];
-				nuevoarray.push(new Contact({ "nombre": data[index].nombre, "apellidos": data[index].apellidos, "entidad": data[index].cargo, "telf": data[index].telf, "email": "ainene@umail.com", "city": "London","picguid" :data[index].imagen.post_title }));
+				nuevoarray.push(new Contact({ "nombre": data[index].nombre, "apellidos": data[index].apellidos, "cargo": data[index].cargo, "telf": data[index].telf, "email": "ainene@umail.com", "city": "London","picguid" :data[index].imagen.post_title }));
 				localStorage.setItem('conrestapi', JSON.stringify(nuevoarray));
             });//each
        }//success
@@ -343,14 +314,13 @@
         /* button  #goto_add */
     $(document).on("click", "#goto_add", function(evt)
     {
-         /*global activate_subpage */
          activate_subpage("#page_to_add"); 
     });
+    
     
         /* button  #gotopage2 */
     $(document).on("click", "#gotopage2", function(evt)
     {
-         /*global activate_subpage */
          activate_subpage("#page2"); 
     });
     
